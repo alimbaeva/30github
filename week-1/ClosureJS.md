@@ -1,4 +1,4 @@
-(ClosureJS)[https://github.com/alimbaeva/31github/blob/main/week-1/ClosureJS.js]
+[ClosureJS](https://github.com/alimbaeva/31github/blob/main/week-1/ClosureJS.js)
 ===
 
 В этом коде JavaScript есть имя переменной, изначально установленное на «Asel», и функция showName, которая регистрирует значение переменной имени. Функция setTimeout используется для выполнения **обратного вызова после задержки** в 1000 миллисекунд.
