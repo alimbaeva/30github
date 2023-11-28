@@ -8,6 +8,8 @@
 Когда функция showName вызывается внутри обратного вызова setTimeout, она записывает значение переменной внутреннего имени, объявленной в обратном вызове. Однако, поскольку **объявление переменной внутреннего имени происходит после оператора console.log(name), это не влияет на вывод.** Следовательно, на выходе будет **«Асель».**
 
 Таким образом, переменная внутреннего имени внутри обратного вызова setTimeout не переопределяет переменную внешнего имени на время выполнения оператора console.log(name) в функции showName.
+
+En
 ===
 
 In this JavaScript code, there is a variable name initially set to 'Asel', and a function showName that logs the value of the name variable. A setTimeout function is used to execute a callback after a delay of 1000 milliseconds.
