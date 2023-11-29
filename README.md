@@ -1,4 +1,4 @@
-# 31github 5/31
+# 31github 6/31
 
 ### start 24.11.2023
 
@@ -18,3 +18,4 @@
 - 3 - *** Day - 3 *** solved task  notMin
 - 4 - *** Day - 4 *** solved task  encodeInputText
 - 5 - *** Day - 5 *** solved task  ClosureJS
+- 6 - *** Day - 6 *** solved task  IIFE
