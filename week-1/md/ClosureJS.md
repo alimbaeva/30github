@@ -1,4 +1,4 @@
-(ClosureJS)[https://github.com/alimbaeva/31github/blob/main/week-1/ClosureJS.js]
+[ClosureJS](https://github.com/alimbaeva/31github/blob/main/week-1/ClosureJS.js)
 ===
 
 В этом коде JavaScript есть имя переменной, изначально установленное на «Asel», и функция showName, которая регистрирует значение переменной имени. Функция setTimeout используется для выполнения **обратного вызова после задержки** в 1000 миллисекунд.
@@ -9,6 +9,7 @@
 
 Таким образом, переменная внутреннего имени внутри обратного вызова setTimeout не переопределяет переменную внешнего имени на время выполнения оператора console.log(name) в функции showName.
 
+En
 ===
 
 In this JavaScript code, there is a variable name initially set to 'Asel', and a function showName that logs the value of the name variable. A setTimeout function is used to execute a callback after a delay of 1000 milliseconds.
