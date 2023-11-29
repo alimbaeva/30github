@@ -1,4 +1,4 @@
-(IIFE)[]
+(IIFE)[https://github.com/alimbaeva/31github/blob/main/week-1/IIFE.js]
 ===
 
 
