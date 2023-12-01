@@ -1,4 +1,4 @@
-[useStick call()]()
+[useStick call()](https://github.com/alimbaeva/31github/blob/main/week-1/useStick.js)
 
 ===
 
