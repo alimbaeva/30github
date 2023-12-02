@@ -1,4 +1,4 @@
-()[]
+(closure)[https://github.com/alimbaeva/31github/blob/main/forTests/js/setTimeoutInFor.js]
 
 ===
 
