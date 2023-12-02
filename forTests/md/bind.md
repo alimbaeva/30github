@@ -1,4 +1,4 @@
-[bind.js]()
+[bind.js](https://github.com/alimbaeva/31github/blob/main/week-1/bind.js)
 
 Этот код использует метод bind() для создания новой функции bind1 на основе функции bind2.
 
