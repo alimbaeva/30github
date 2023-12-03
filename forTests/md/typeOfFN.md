@@ -1,4 +1,4 @@
-()[]
+(typeOfFN)[https://github.com/alimbaeva/31github/blob/main/forTests/js/typeOfFN.js]
 
 
 Этот код вызовет ошибку "Uncaught ReferenceError: g is not defined". Давайте разберемся, что происходит.
