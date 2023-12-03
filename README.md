@@ -1,4 +1,4 @@
-# 31github 6/31
+# 31github 10/31
 
 ### start 24.11.2023
 
@@ -19,3 +19,7 @@
 - 4 - *** Day - 4 *** solved task  encodeInputText
 - 5 - *** Day - 5 *** solved task  ClosureJS
 - 6 - *** Day - 6 *** solved task  IIFE
+- 7 - *** Day - 7 *** solved task  bind
+- 8 - *** Day - 8 *** solved task  setTimeout
+- 9 - *** Day - 9 *** solved task  useStick
+- 10 - *** Day - 10 *** solved task  typeOfFN
