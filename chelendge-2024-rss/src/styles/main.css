@@ -6,12 +6,60 @@
 }
 
 body {
-    font-size: 1.2rem;
+    font-size: .8rem;
     font-weight: 500;
 }
 
-body svg {
+main {
+    min-height: 50vh;
+}
+
+body.light svg {
     fill: var(--black);
+}
+
+body.dark svg {
+    fill: var(--white);
+}
+
+body.dark #nonogram,
+body.dark .up-hints_rows,
+body.dark .left-hints_rows,
+body.dark ul,
+body.dark li,
+body.dark div {
+    border-color: var(--white);
+}
+
+body.light #nonogram,
+body.light .up-hints_rows,
+body.light .left-hints_rows,
+body.light ul,
+body.light li,
+body.light div {
+    border-color: var(--black);
+}
+
+body.light .name-block ul,
+body.light .level-list {
+    background-color: var(--light-green-191);
+}
+
+body.dark .name-block ul,
+body.dark .level-list {
+    background-color: var(--gray);
+}
+
+body.light .name-block li:hover,
+body.light .level_block li:hover {
+    background-color: var(--light-green-178);
+    font-weight: 600;
+}
+
+body.dark .name-block li:hover,
+body.dark .level_block li:hover {
+    background-color: var(--gray-3d);
+    font-weight: 600;
 }
 
 ul {

@@ -42,6 +42,12 @@ nav svg {
     cursor: pointer;
 }
 
+.name-block ul {
+    min-width: 7rem;
+    height: 10rem;
+    overflow: auto;
+}
+
 .name-block ul,
 .level_block ul {
     position: absolute;
@@ -49,7 +55,6 @@ nav svg {
     right: 0;
     transform: translateY(100%);
     transition: transform .3s ease;
-    background-color: var(--light-green-191);
 }
 
 .name-block.active ul,
@@ -61,12 +66,6 @@ nav svg {
 .level_block li {
     padding: .6rem;
     cursor: pointer;
-}
-
-.name-block li:hover,
-.level_block li:hover {
-    background-color: var(--light-green-178);
-    font-weight: 900;
 }
 
 .theme svg {

@@ -1,9 +1,11 @@
 :root {
     --blue-44: rgb(2, 2, 44);
     --black: #000;
+    --gray: #3f3a3a;
+    --gray-3d: #353131;
     --white: #FFF;
     --blue-178: rgb(187, 187, 228);
-    --light-green-191: rgb(234, 238, 191);
+    --light-green-191: #9cdeba;
     --light-green-178: rgb(108, 213, 178);
     --light-green-115: rgb(34, 155, 115);
 }

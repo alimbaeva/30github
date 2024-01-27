@@ -1,9 +1,13 @@
-class Header {
+class Nonograms extends GetDataNonograms {
   constructor() {
+    super();
     this.body = document.querySelector('body');
     this.level = 1;
-    this.nameText = '-наименование-';
-    this.name = ['-наименование-', 'дом', 'насекомые', 'транспорт', 'цветы'];
+    this.theme = 'light';
+    this.nameText = localStorage.getItem('nameText')
+      ? localStorage.getItem('nameText')
+      : '----------';
+    this.currentGameTitle = '';
     this.upHints = {
       0: [2, 3],
       1: [2, 3, 1],
@@ -18,9 +22,26 @@ class Header {
       3: [2, 3, 1],
       4: [2, 3, 1],
     };
+    this.curentNonogram = [];
+    this.themeDarkIcon = `
+        <svg id="dark" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <path d="M12,22C6.5,22,2,17.5,2,12c0-4.7,3.4-8.9,8-9.8c0.4-0.1,0.9,0.1,1.1,0.5c0.2,0.4,0.1,0.9-0.2,1.2C9.7,5.1,9,6.8,9,8.5    c0,3.6,2.9,6.5,6.5,6.5c1.7,0,3.4-0.7,4.6-1.9c0.3-0.3,0.8-0.4,1.2-0.2c0.4,0.2,0.6,0.6,0.5,1.1C20.9,18.6,16.7,22,12,22z     M7.6,5.3C5.4,6.8,4,9.2,4,12c0,4.4,3.6,8,8,8c2.8,0,5.2-1.4,6.7-3.6c-1,0.4-2.1,0.6-3.2,0.6C10.8,17,7,13.2,7,8.5    C7,7.4,7.2,6.3,7.6,5.3z"/>
+        </svg>
+    `;
+    this.themeLightIcon = `
+    <svg id="light" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <path d="M20,11h-2c0,0-0.1,0-0.1,0c-0.2-0.9-0.5-1.8-1-2.5c0,0,0.1,0,0.1-0.1l1.4-1.4c0.4-0.4,0.4-1,0-1.4s-1-0.4-1.4,0l-1.4,1.4   c0,0,0,0.1-0.1,0.1c-0.7-0.5-1.6-0.9-2.5-1c0,0,0-0.1,0-0.1V4c0-0.6-0.4-1-1-1s-1,0.4-1,1v2c0,0,0,0.1,0,0.1   c-0.9,0.2-1.8,0.5-2.5,1c0,0,0-0.1-0.1-0.1L7.1,5.6c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l1.4,1.4c0,0,0.1,0,0.1,0.1   c-0.5,0.7-0.9,1.6-1,2.5c0,0-0.1,0-0.1,0H4c-0.6,0-1,0.4-1,1s0.4,1,1,1h2c0,0,0.1,0,0.1,0c0.2,0.9,0.5,1.8,1,2.5c0,0-0.1,0-0.1,0.1   l-1.4,1.4c-0.4,0.4-0.4,1,0,1.4c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0,0,0-0.1,0.1-0.1c0.7,0.5,1.6,0.9,2.5,1   c0,0,0,0.1,0,0.1v2c0,0.6,0.4,1,1,1s1-0.4,1-1v-2c0,0,0-0.1,0-0.1c0.9-0.2,1.8-0.5,2.5-1c0,0,0,0.1,0.1,0.1l1.4,1.4   c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3c0.4-0.4,0.4-1,0-1.4l-1.4-1.4c0,0-0.1,0-0.1-0.1c0.5-0.7,0.9-1.6,1-2.5c0,0,0.1,0,0.1,0   h2c0.6,0,1-0.4,1-1S20.6,11,20,11z M12,16c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S14.2,16,12,16z"/>
+    </svg>
+`;
   }
 
   drowHeader() {
+    if (this.theme === 'light') {
+      this.body.classList.add('light');
+    } else {
+      this.body.classList.add('dark');
+    }
+
     const header = document.createElement('header');
 
     const container = document.createElement('div');
@@ -53,6 +74,7 @@ class Header {
     levelSpan.textContent = this.level;
     const levelList = document.createElement('ul');
     levelList.classList.add('level-list', 'hidden');
+
     const svgIconLevel = `
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 284.929 284.929">
             <path d="M282.082,76.511l-14.274-14.273c-1.902-1.906-4.093-2.856-6.57-2.856c-2.471,0-4.661,0.95-6.563,2.856L142.466,174.441
@@ -78,7 +100,7 @@ class Header {
     const nameBlock = document.createElement('div');
     nameBlock.classList.add('name-block');
     const nameTitle = document.createElement('p');
-    nameTitle.textContent = '-наименование-';
+    nameTitle.textContent = this.nameText;
     const nameList = document.createElement('ul');
     nameList.classList.add('hidden');
     const svgIconName = `
@@ -90,10 +112,11 @@ class Header {
         </svg>
     `;
 
-    for (let i = 0; i < this.name.length; i += 1) {
+    for (let i = 0; i < this.namesArray.length; i += 1) {
+      const arrname = this.namesArray[i].split('__');
       const levelListItem = document.createElement('li');
-      levelListItem.textContent = `${this.name[i]}`;
-      levelListItem.dataset.name = `${this.name[i]}`;
+      levelListItem.textContent = `${arrname[0]} ${arrname[1]}`;
+      levelListItem.dataset.name = `${this.namesArray[i]}`;
       nameList.append(levelListItem);
     }
 
@@ -111,18 +134,9 @@ class Header {
 
     const buttonTheme = document.createElement('button');
     buttonTheme.classList.add('theme');
-    const themeDarkIcon = `
-        <svg id="dark" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <path d="M12,22C6.5,22,2,17.5,2,12c0-4.7,3.4-8.9,8-9.8c0.4-0.1,0.9,0.1,1.1,0.5c0.2,0.4,0.1,0.9-0.2,1.2C9.7,5.1,9,6.8,9,8.5    c0,3.6,2.9,6.5,6.5,6.5c1.7,0,3.4-0.7,4.6-1.9c0.3-0.3,0.8-0.4,1.2-0.2c0.4,0.2,0.6,0.6,0.5,1.1C20.9,18.6,16.7,22,12,22z     M7.6,5.3C5.4,6.8,4,9.2,4,12c0,4.4,3.6,8,8,8c2.8,0,5.2-1.4,6.7-3.6c-1,0.4-2.1,0.6-3.2,0.6C10.8,17,7,13.2,7,8.5    C7,7.4,7.2,6.3,7.6,5.3z"/>
-        </svg>
-    `;
-    // const themeLightIcon = `
-    //     <svg id="light" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    //     <path d="M20,11h-2c0,0-0.1,0-0.1,0c-0.2-0.9-0.5-1.8-1-2.5c0,0,0.1,0,0.1-0.1l1.4-1.4c0.4-0.4,0.4-1,0-1.4s-1-0.4-1.4,0l-1.4,1.4   c0,0,0,0.1-0.1,0.1c-0.7-0.5-1.6-0.9-2.5-1c0,0,0-0.1,0-0.1V4c0-0.6-0.4-1-1-1s-1,0.4-1,1v2c0,0,0,0.1,0,0.1   c-0.9,0.2-1.8,0.5-2.5,1c0,0,0-0.1-0.1-0.1L7.1,5.6c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l1.4,1.4c0,0,0.1,0,0.1,0.1   c-0.5,0.7-0.9,1.6-1,2.5c0,0-0.1,0-0.1,0H4c-0.6,0-1,0.4-1,1s0.4,1,1,1h2c0,0,0.1,0,0.1,0c0.2,0.9,0.5,1.8,1,2.5c0,0-0.1,0-0.1,0.1   l-1.4,1.4c-0.4,0.4-0.4,1,0,1.4c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l1.4-1.4c0,0,0-0.1,0.1-0.1c0.7,0.5,1.6,0.9,2.5,1   c0,0,0,0.1,0,0.1v2c0,0.6,0.4,1,1,1s1-0.4,1-1v-2c0,0,0-0.1,0-0.1c0.9-0.2,1.8-0.5,2.5-1c0,0,0,0.1,0.1,0.1l1.4,1.4   c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3c0.4-0.4,0.4-1,0-1.4l-1.4-1.4c0,0-0.1,0-0.1-0.1c0.5-0.7,0.9-1.6,1-2.5c0,0,0.1,0,0.1,0   h2c0.6,0,1-0.4,1-1S20.6,11,20,11z M12,16c-2.2,0-4-1.8-4-4s1.8-4,4-4s4,1.8,4,4S14.2,16,12,16z"/>
-    //     </svg>
-    // `;
-    buttonTheme.innerHTML += themeDarkIcon;
-    // buttonTheme.innerHTML += themeLightIcon;
+
+    buttonTheme.innerHTML =
+      this.theme === 'light' ? this.themeDarkIcon : this.themeLightIcon;
 
     innerHeader.append(buttonTheme);
     container.append(innerHeader);
@@ -179,11 +193,6 @@ class Header {
   }
 
   game() {
-    let size = 5;
-    if (this.level === 1) size = 5;
-    if (this.level === 2) size = 10;
-    if (this.level === 3) size = 15;
-
     const mainBlock = document.createElement('main');
     const parentBlock = document.createElement('div');
     const parentInnerBlock = document.createElement('div');
@@ -202,12 +211,18 @@ class Header {
     leftHints.classList.add('left-hints');
 
     upBlock.append(
-      this.tableCreateHint(size, upHints, this.upHints, 'up', 'up-hints_rows')
+      this.tableCreateHint(
+        this.curentNonogram.length,
+        upHints,
+        this.upHints,
+        'up',
+        'up-hints_rows'
+      )
     );
 
     downBlock.append(
       this.tableCreateHint(
-        size,
+        this.curentNonogram.length,
         leftHints,
         this.leftHints,
         'left',
@@ -215,17 +230,15 @@ class Header {
       )
     );
 
-    const nanogramArr = this.getIdentityMatrix(size);
-
-    nanogramArr.forEach((arr) => {
+    this.curentNonogram.forEach((arr, ind) => {
       const rowLi = document.createElement('li');
       const rowInnerUl = document.createElement('ul');
 
       rowLi.classList.add('nonogram-row');
 
-      arr.forEach((item) => {
+      arr.forEach((item, ind2) => {
         const itemLi = document.createElement('li');
-        itemLi.id = item;
+        itemLi.id = `${ind}-${ind2}`;
         rowInnerUl.append(itemLi);
       });
       rowLi.append(rowInnerUl);
@@ -239,15 +252,6 @@ class Header {
     parentBlock.append(parentInnerBlock);
     mainBlock.append(parentBlock);
     this.body.append(mainBlock);
-  }
-
-  getIdentityMatrix(size) {
-    return Array.from({ length: size }, (_, outIndex) =>
-      Array.from(
-        { length: size },
-        (v, innerIndex) => `${outIndex}-${innerIndex}`
-      )
-    );
   }
 
   tableCreateHint(size, block, hints, idName, className) {
@@ -270,6 +274,29 @@ class Header {
     return block;
   }
 
+  getRandom() {
+    // если this.nameText пуст то выбираем по рандомна опираясь на level
+    if (!localStorage.getItem('nameText')) {
+      const gameArr = this.data[`level-${this.level}`];
+      const arrLevelname = Object.keys(gameArr);
+      const index = Math.floor(Math.random() * arrLevelname.length);
+      this.currentGameTitle = arrLevelname[index];
+
+      this.upHints =
+        this.data[`level-${this.level}`][arrLevelname[index]].upHints;
+      this.leftHints =
+        this.data[`level-${this.level}`][arrLevelname[index]].leftHints;
+      this.curentNonogram =
+        this.data[`level-${this.level}`][arrLevelname[index]].result;
+    } else {
+      // this.nameText true то выбираем по выбору юзера
+      const curentData = this.nameText.split(' ');
+      this.upHints = this.data[curentData[1]][curentData[0]].upHints;
+      this.leftHints = this.data[curentData[1]][curentData[0]].leftHints;
+      this.curentNonogram = this.data[curentData[1]][curentData[0]].result;
+    }
+  }
+
   elEvent() {
     const levelInnerBlock = document.querySelector('.level_inner-block');
     const levelSpan = document.querySelector('.level_inner-block span');
@@ -286,7 +313,18 @@ class Header {
 
     nameList.addEventListener('click', (e) => {
       this.nameText = e.target.textContent;
-      nameBlockText.textContent = this.nameText; // Обновляем текст в nameBlockText
+      localStorage.setItem('nameText', this.nameText);
+
+      // Обновляем уровень (level)
+      const levelArr = this.nameText.split(' ')[1].split('-');
+      this.level = `${levelArr[1]}`;
+
+      // Обновляем body
+      this.body.innerHTML = '';
+      this.getData();
+
+      // Обновляем текст в nameBlockText
+      nameBlockText.textContent = this.nameText;
     });
 
     levelInnerBlock.addEventListener('click', () => {
@@ -296,39 +334,48 @@ class Header {
 
     levelList.addEventListener('click', (e) => {
       this.level = e.target.textContent;
-      levelSpan.textContent = this.level; // Обновляем текст в levelSpan
+
+      // Обновляем текст в level(уровень)
+      levelSpan.textContent = this.level;
+
+      // Очищаем nameText
+      localStorage.removeItem('nameText');
+      this.nameText = '----------';
+      this.body.innerHTML = '';
+      this.getData();
     });
 
+    // смена цвета экрана
     theme.addEventListener('click', () => {
-      this.body.classList.toggle('dark');
-      this.body.classList.toggle('light');
+      const buttonTheme = document.querySelector('.theme');
       if (this.body.classList.contains('dark')) {
-        const allLi = document.querySelectorAll('.parent-block li');
-        const allDiv = document.querySelectorAll('.parent-block div');
-
-        allLi.forEach((el) => {
-          el.style.borderColor = '#FFF';
-        });
-        allDiv.forEach((el) => {
-          el.style.borderColor = '#FFF';
-        });
+        this.body.classList.add('light');
+        this.body.classList.remove('dark');
+        this.theme = 'light';
+        buttonTheme.innerHTML = this.themeDarkIcon;
       } else {
-        const allLi = document.querySelectorAll('.parent-block li');
-        const allDiv = document.querySelectorAll('.parent-block div');
-
-        allLi.forEach((el) => {
-          el.style.borderColor = '#000';
-        });
-        allDiv.forEach((el) => {
-          el.style.borderColor = '#000';
-        });
+        this.body.classList.remove('light');
+        this.body.classList.add('dark');
+        this.theme = 'dark';
+        buttonTheme.innerHTML = this.themeLightIcon;
       }
     });
   }
+
+  async getData() {
+    try {
+      await this.fetchData('/src/data/data.json').then(() => {});
+
+      this.drowHeader();
+      this.getRandom();
+      this.game();
+      this.drowFooter();
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
 
-const header = new Header();
+const nonograms = new Nonograms();
 
-header.drowHeader();
-header.game();
-header.drowFooter();
+nonograms.getData();
