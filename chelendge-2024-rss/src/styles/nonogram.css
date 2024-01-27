@@ -1,0 +1,119 @@
+@import url(./variables.css);
+@import url(./main.css);
+
+.down-block,
+.up-block {
+    height: 15.8rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    position: relative;
+}
+
+.parent-block,
+.left-hints_rows li,
+#nonogram {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.parent-block {
+    justify-content: center;
+}
+
+#nonogram {
+    width: 15.7rem;
+    height: 15.7rem;
+    border-left: .2rem solid var(--black);
+    border-top: .2rem solid var(--black);
+    border-right: .02rem solid var(--black);
+    border-bottom: .02rem solid var(--black);
+}
+
+.left-hints_rows,
+.nonogram-row {
+    height: 3.1rem;
+    width: 100%;
+    border-bottom: .02rem solid var(--black);
+}
+
+.left-hints_rows:last-child,
+.nonogram-row:last-child {
+    border-bottom: none;
+}
+
+.left-hints_rows ul,
+.nonogram-row ul {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left-hints_rows li,
+.nonogram-row li {
+    width: 3.1rem;
+    height: 3.1rem;
+    justify-content: center;
+    border-right: .02rem solid var(--black);
+    cursor: pointer;
+}
+
+.left-hints_rows li:last-child,
+.nonogram-row li:last-child {
+    border-right: none;
+}
+
+.left-hints_rows li:first-child {
+    border-left: .02rem solid var(--black);
+}
+
+.left-hints_rows:first-child {
+    border-top: .02rem solid var(--black);
+}
+
+.left-hints_rows:last-child {
+    border-bottom: .02rem solid var(--black);
+}
+
+.up-hints {
+  display: flex;
+}
+
+.up-hints_rows {
+    width: 3.1rem;
+    border-right: .02rem solid var(--black);
+}
+
+.up-hints_rows li {
+    height: 3.1rem;
+    border-bottom: .02rem solid var(--black);
+}
+
+.up-hints_rows li:first-child {
+    border-top: .02rem solid var(--black);
+}
+
+.up-hints_rows li:last-child{
+    border-bottom: none;
+}
+
+.up-hints_rows,
+.up-hints_rows li,
+.up-hints_rows ul {
+  display: flex;
+  flex-direction: column; /* Устанавливаем вертикальное направление для вложенного списка */
+  justify-content: flex-end;
+}
+
+.up-hints_rows li {
+    justify-content: center;
+    align-items: center;
+}
+
+.up-hints_rows:first-child {
+    border-left: .02rem solid var(--black);
+}

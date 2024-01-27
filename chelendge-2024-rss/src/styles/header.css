@@ -1,0 +1,92 @@
+@import url(./variables.css);
+@import url(./main.css);
+
+.theme,
+.header,
+.name-block,
+.level_block,
+.level_inner-block,
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header {
+    box-shadow: 0 8px 6px -6px var(--blue-178); 
+}
+
+.header {
+    padding: 2rem 0;
+}
+
+nav {
+    width: 40%;
+}
+
+nav svg {
+    width: .6rem;
+    cursor: pointer;
+    margin-left: .5rem;
+}
+
+.burger-menu svg {
+    width: 2rem;
+    cursor: pointer;
+}
+
+.name-block,
+.level_inner-block {
+    margin: .5rem;
+    position: relative;
+    cursor: pointer;
+}
+
+.name-block ul,
+.level_block ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    transform: translateY(100%);
+    transition: transform .3s ease;
+    background-color: var(--light-green-191);
+}
+
+.name-block.active ul,
+.level_inner-block.active ul {
+    transform: translateY(0);
+}
+
+.name-block li,
+.level_block li {
+    padding: .6rem;
+    cursor: pointer;
+}
+
+.name-block li:hover,
+.level_block li:hover {
+    background-color: var(--light-green-178);
+    font-weight: 900;
+}
+
+.theme svg {
+    width: 1rem;
+}
+
+.theme,
+.winnings {
+    cursor: pointer;
+    border-radius: .4rem;
+    background-color: var(--light-green-191);
+    padding: .2rem .9rem;
+    border: none;
+}
+
+.theme {
+    padding: .3rem;
+}
+
+.winnings:hover,
+.theme:hover {
+    background-color: var(--light-green-178);
+}

@@ -1,0 +1,44 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+body svg {
+    fill: var(--black);
+}
+
+ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.light {
+    color: var(--blue-44);
+    background-color: var(--white);
+}
+
+.dark {
+    color: var(--blue-178);
+    background-color: var(--black);
+}
+
+.container {
+    max-width: 65.5rem;
+    margin: 0 auto;
+}
+
+.hidden {
+    display: none;
+}
