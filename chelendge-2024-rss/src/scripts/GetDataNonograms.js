@@ -1,5 +1,6 @@
-class GetDataNonograms {
+class GetDataNonograms extends Timer {
   constructor() {
+    super();
     this.data = {};
     this.namesArray = [];
   }

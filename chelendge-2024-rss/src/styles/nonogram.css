@@ -10,6 +10,7 @@
     position: relative;
 }
 
+.batton-block,
 #timer,
 .nonogram-row li,
 .parent-block,
@@ -140,4 +141,22 @@
     padding: .5rem;
     border-radius: .6rem;
     box-shadow: 0 0 2rem var(--light-green-191);
+}
+
+.batton-block {
+    width: 40%;
+    margin: 2rem auto;
+}
+
+.batton-block button {
+    padding: .4rem .8rem;
+    border: none;
+    border-radius: .5rem;
+    background-color: var(--light-green-191);
+    cursor: pointer;
+}
+
+.batton-block button:hover {
+    background-color: var(--light-green-115);
+    box-shadow: 0 0 1.5rem var(--light-green-191);
 }

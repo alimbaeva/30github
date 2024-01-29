@@ -2,14 +2,12 @@ class Nonograms extends GetDataNonograms {
   constructor() {
     super();
     this.body = document.querySelector('body');
+    this.gameStart = false;
+    this.randomBtn = false;
     this.level = 1;
     this.theme = 'light';
     this.userResult = 0;
     this.countOne = 0;
-    this.timer = {
-      start: 0,
-      end: 0,
-    };
     this.winResults = {
       1: {},
       2: {},
@@ -205,7 +203,31 @@ class Nonograms extends GetDataNonograms {
     this.body.append(footer);
   }
 
+  drowButtons() {
+    const parentBlock = document.createElement('div');
+    const randomBtn = document.createElement('button');
+    const decisionBtn = document.createElement('button');
+    const saveBtn = document.createElement('button');
+
+    parentBlock.classList.add('batton-block');
+    saveBtn.id = 'save-game';
+    decisionBtn.id = 'decision-game';
+    randomBtn.id = 'random-game';
+
+    saveBtn.textContent = 'save game';
+    decisionBtn.textContent = 'decision game';
+    randomBtn.textContent = 'random game';
+
+    parentBlock.append(randomBtn);
+    parentBlock.append(decisionBtn);
+    parentBlock.append(saveBtn);
+
+    return parentBlock;
+  }
+
   game() {
+    this.gameStart = false;
+
     const mainBlock = document.createElement('main');
     const parentBlock = document.createElement('div');
     const parentInnerBlock = document.createElement('div');
@@ -260,63 +282,21 @@ class Nonograms extends GetDataNonograms {
       nonogramInnerUl.append(rowLi);
     });
 
+    const buttonsBlock = this.drowButtons();
+
     nonogramBlock.append(nonogramInnerUl);
     downBlock.append(nonogramBlock);
     parentInnerBlock.append(upBlock);
     parentInnerBlock.append(downBlock);
     parentBlock.append(parentInnerBlock);
     mainBlock.append(parentBlock);
+    mainBlock.append(buttonsBlock);
+
     this.body.append(mainBlock);
 
     this.handlenonogramCeil();
+    this.handleButtonsInGame();
   }
-
-  timerEl() {
-    const timer = document.createElement('span');
-    timer.id = 'timer';
-
-    // Инициализируем переменные для секундомера
-    let startTime;
-    let timerInterval;
-
-    function formatTime(timeInSeconds) {
-      const minutes = Math.floor(timeInSeconds / 60);
-      const seconds = timeInSeconds % 60;
-      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    }
-
-    // Функция для обновления секундомера
-    function updateTimer() {
-      const currentTime = Math.floor((Date.now() - startTime) / 1000);
-      timer.textContent = formatTime(currentTime);
-      console.log(timer);
-
-      // Останавливаем секундомер после 5 секунд
-      // if (currentTime >= 30) {
-      //   stopTimer();
-      //   alert('Игра окончена!');
-      // }
-    }
-    function startTimer() {
-      startTime = Date.now();
-      timerInterval = setInterval(updateTimer, 1000);
-    }
-
-    // Функция для остановки секундомера
-    function stopTimer() {
-      console.log('stopTimer', timerInterval);
-      clearInterval(timerInterval);
-    }
-
-    // Запускаем секундомер при загрузке страницы
-    startTimer();
-    this.body.append(timer);
-    console.log(timerBlock);
-    return timerBlock;
-  }
-  // drowElements() {
-
-  // }
 
   tableCreateHint(size, block, hints, idName, className) {
     for (let i = 0; i < size; i += 1) {
@@ -431,17 +411,29 @@ class Nonograms extends GetDataNonograms {
 
     // Получаем элемент, при клике на левую кнопку мыши
     nonogram.addEventListener('click', (event) => {
+      if (!this.gameStart) {
+        this.launch();
+        this.gameStart = true;
+      }
       const ceil = event.target;
       if (ceil.dataset.fill === '1' && !ceil.classList.contains('ceil')) {
         this.userResult += 1;
-        ceil.classList.add('ceil');
-        ceil.textContent = '';
       }
-      if (this.userResult === this.countOne) alert('WIN');
+      ceil.classList.add('ceil');
+      ceil.textContent = '';
+      if (this.userResult === this.countOne) {
+        this.stopTimer();
+        this.gameStart = false;
+        alert('WIN');
+      }
     });
 
     // Получаем элемент, и вводим Х при клике на правую кнопку мыши
     nonogram.addEventListener('contextmenu', (event) => {
+      if (!this.gameStart) {
+        this.launch();
+        this.gameStart = true;
+      }
       event.preventDefault();
       if (event.button === 2) {
         const ceilX = event.target;
@@ -450,8 +442,35 @@ class Nonograms extends GetDataNonograms {
           ceilX.classList.remove('ceil');
         }
         ceilX.textContent = 'X';
-        if (this.userResult === this.countOne) alert('WIN');
+        if (this.userResult === this.countOne) {
+          this.stopTimer();
+          this.gameStart = false;
+          alert('WIN');
+        }
       }
+    });
+  }
+
+  handleButtonsInGame() {
+    const saveBtn = document.querySelector('#save-game');
+    const decisionBtn = document.querySelector('#decision-game');
+    const randomBtn = document.querySelector('#random-game');
+
+    randomBtn.addEventListener('click', () => {
+      this.randomBtn = true;
+      setTimeout(() => {
+        this.randomBtn = false;
+      }, 2000);
+      const index = Math.floor(Math.random() * this.namesArray.length);
+      const chooseGame = this.namesArray[index].split('__');
+
+      this.level = `${chooseGame[1].split('-')[1]}`;
+      this.upHints = this.data[chooseGame[1]][chooseGame[0]].upHints;
+      this.leftHints = this.data[chooseGame[1]][chooseGame[0]].leftHints;
+      this.curentNonogram = this.data[chooseGame[1]][chooseGame[0]].result;
+
+      this.body.innerHTML = '';
+      this.getData();
     });
   }
 
@@ -460,7 +479,7 @@ class Nonograms extends GetDataNonograms {
       await this.fetchData('/src/data/data.json').then(() => {});
 
       this.drowHeader();
-      this.getRandom();
+      if (!this.randomBtn) this.getRandom();
       this.game();
       this.drowFooter();
     } catch (err) {
@@ -472,4 +491,3 @@ class Nonograms extends GetDataNonograms {
 const nonograms = new Nonograms();
 
 nonograms.getData();
-nonograms.timerEl();
