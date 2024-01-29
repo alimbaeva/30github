@@ -4,6 +4,19 @@ class Nonograms extends GetDataNonograms {
     this.body = document.querySelector('body');
     this.level = 1;
     this.theme = 'light';
+    this.userResult = 0;
+    this.countOne = 0;
+    this.timer = {
+      start: 0,
+      end: 0,
+    };
+    this.winResults = {
+      1: {},
+      2: {},
+      3: {},
+      4: {},
+      5: {},
+    };
     this.nameText = localStorage.getItem('nameText')
       ? localStorage.getItem('nameText')
       : '----------';
@@ -239,6 +252,8 @@ class Nonograms extends GetDataNonograms {
       arr.forEach((item, ind2) => {
         const itemLi = document.createElement('li');
         itemLi.id = `${ind}-${ind2}`;
+        itemLi.dataset.fill = item;
+        if (item) this.countOne += 1;
         rowInnerUl.append(itemLi);
       });
       rowLi.append(rowInnerUl);
@@ -252,7 +267,56 @@ class Nonograms extends GetDataNonograms {
     parentBlock.append(parentInnerBlock);
     mainBlock.append(parentBlock);
     this.body.append(mainBlock);
+
+    this.handlenonogramCeil();
   }
+
+  timerEl() {
+    const timer = document.createElement('span');
+    timer.id = 'timer';
+
+    // Инициализируем переменные для секундомера
+    let startTime;
+    let timerInterval;
+
+    function formatTime(timeInSeconds) {
+      const minutes = Math.floor(timeInSeconds / 60);
+      const seconds = timeInSeconds % 60;
+      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    // Функция для обновления секундомера
+    function updateTimer() {
+      const currentTime = Math.floor((Date.now() - startTime) / 1000);
+      timer.textContent = formatTime(currentTime);
+      console.log(timer);
+
+      // Останавливаем секундомер после 5 секунд
+      // if (currentTime >= 30) {
+      //   stopTimer();
+      //   alert('Игра окончена!');
+      // }
+    }
+    function startTimer() {
+      startTime = Date.now();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    // Функция для остановки секундомера
+    function stopTimer() {
+      console.log('stopTimer', timerInterval);
+      clearInterval(timerInterval);
+    }
+
+    // Запускаем секундомер при загрузке страницы
+    startTimer();
+    this.body.append(timer);
+    console.log(timerBlock);
+    return timerBlock;
+  }
+  // drowElements() {
+
+  // }
 
   tableCreateHint(size, block, hints, idName, className) {
     for (let i = 0; i < size; i += 1) {
@@ -362,6 +426,35 @@ class Nonograms extends GetDataNonograms {
     });
   }
 
+  handlenonogramCeil() {
+    const nonogram = document.querySelector('#nonogram');
+
+    // Получаем элемент, при клике на левую кнопку мыши
+    nonogram.addEventListener('click', (event) => {
+      const ceil = event.target;
+      if (ceil.dataset.fill === '1' && !ceil.classList.contains('ceil')) {
+        this.userResult += 1;
+        ceil.classList.add('ceil');
+        ceil.textContent = '';
+      }
+      if (this.userResult === this.countOne) alert('WIN');
+    });
+
+    // Получаем элемент, и вводим Х при клике на правую кнопку мыши
+    nonogram.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+      if (event.button === 2) {
+        const ceilX = event.target;
+        if (ceilX.dataset.fill === '1' && ceilX.classList.contains('ceil')) {
+          this.userResult -= 1;
+          ceilX.classList.remove('ceil');
+        }
+        ceilX.textContent = 'X';
+        if (this.userResult === this.countOne) alert('WIN');
+      }
+    });
+  }
+
   async getData() {
     try {
       await this.fetchData('/src/data/data.json').then(() => {});
@@ -379,3 +472,4 @@ class Nonograms extends GetDataNonograms {
 const nonograms = new Nonograms();
 
 nonograms.getData();
+nonograms.timerEl();

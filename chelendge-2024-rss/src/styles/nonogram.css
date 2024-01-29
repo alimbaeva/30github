@@ -10,6 +10,8 @@
     position: relative;
 }
 
+#timer,
+.nonogram-row li,
 .parent-block,
 .left-hints_rows li,
 #nonogram {
@@ -61,6 +63,10 @@
     justify-content: center;
     border-right: .02rem solid var(--black);
     cursor: pointer;
+}
+
+.nonogram-row li {
+    justify-content: center;
 }
 
 .left-hints_rows li:last-child,
@@ -118,4 +124,20 @@
 
 .up-hints_rows:first-child {
     border-left: .02rem solid var(--black);
+}
+
+#timer {
+    justify-content: center;
+    position: fixed;
+    right: 2rem;
+    bottom: 6rem;
+    z-index: 10;
+    background-color: var(--light-green-178);
+    font-weight: 900;
+    color: var(--blue-44) !important;
+    min-width: 3rem;
+    height: 3rem;
+    padding: .5rem;
+    border-radius: .6rem;
+    box-shadow: 0 0 2rem var(--light-green-191);
 }
