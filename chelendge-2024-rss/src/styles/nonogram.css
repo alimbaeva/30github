@@ -144,7 +144,7 @@
 }
 
 .batton-block {
-    width: 40%;
+    max-width: 15.5rem;
     margin: 2rem auto;
 }
 

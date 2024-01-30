@@ -72,6 +72,7 @@ nav svg {
     width: 1rem;
 }
 
+#random-game,
 .theme,
 .winnings {
     cursor: pointer;
@@ -85,6 +86,7 @@ nav svg {
     padding: .3rem;
 }
 
+#random-game:hover,
 .winnings:hover,
 .theme:hover {
     background-color: var(--light-green-178);

@@ -33,6 +33,7 @@ class Nonograms extends GetDataNonograms {
       3: [2, 3, 1],
       4: [2, 3, 1],
     };
+    this.userChoose = [];
     this.curentNonogram = [];
     this.themeDarkIcon = `
         <svg id="dark" version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -136,6 +137,11 @@ class Nonograms extends GetDataNonograms {
     nameBlock.append(nameList);
     nav.append(nameBlock);
 
+    const randomBtn = document.createElement('button');
+    randomBtn.id = 'random-game';
+    randomBtn.textContent = 'random game';
+    nav.append(randomBtn);
+
     const winningsButton = document.createElement('button');
     winningsButton.classList.add('winnings');
     winningsButton.textContent = 'выигрыши';
@@ -205,27 +211,23 @@ class Nonograms extends GetDataNonograms {
 
   drowButtons() {
     const parentBlock = document.createElement('div');
-    const randomBtn = document.createElement('button');
     const decisionBtn = document.createElement('button');
     const saveBtn = document.createElement('button');
 
     parentBlock.classList.add('batton-block');
     saveBtn.id = 'save-game';
     decisionBtn.id = 'decision-game';
-    randomBtn.id = 'random-game';
 
     saveBtn.textContent = 'save game';
     decisionBtn.textContent = 'decision game';
-    randomBtn.textContent = 'random game';
 
-    parentBlock.append(randomBtn);
     parentBlock.append(decisionBtn);
     parentBlock.append(saveBtn);
 
     return parentBlock;
   }
 
-  game() {
+  game(decision = false) {
     this.gameStart = false;
 
     const mainBlock = document.createElement('main');
@@ -275,6 +277,7 @@ class Nonograms extends GetDataNonograms {
         const itemLi = document.createElement('li');
         itemLi.id = `${ind}-${ind2}`;
         itemLi.dataset.fill = item;
+        if (decision && item) itemLi.classList.add('ceil');
         if (item) this.countOne += 1;
         rowInnerUl.append(itemLi);
       });
@@ -290,12 +293,18 @@ class Nonograms extends GetDataNonograms {
     parentInnerBlock.append(downBlock);
     parentBlock.append(parentInnerBlock);
     mainBlock.append(parentBlock);
-    mainBlock.append(buttonsBlock);
 
-    this.body.append(mainBlock);
+    if (!decision) {
+      mainBlock.append(buttonsBlock);
+      this.body.append(mainBlock);
+      this.handleButtonsInGame();
+      this.handlenonogramCeil();
+    }
+    if (decision) {
+      return mainBlock;
+    }
 
-    this.handlenonogramCeil();
-    this.handleButtonsInGame();
+    return undefined;
   }
 
   tableCreateHint(size, block, hints, idName, className) {
@@ -341,6 +350,30 @@ class Nonograms extends GetDataNonograms {
     }
   }
 
+  buildMatrix() {
+    let n = 0;
+    if (this.level === 1) n = 5;
+    if (this.level === 2) n = 10;
+    if (this.level === 3) n = 15;
+
+    this.userChoose = Array.from({ length: n }, () =>
+      Array.from({ length: n }, () => 0)
+    );
+  }
+
+  arrayCompare() {
+    for (let i = 0; i < this.curentNonogram.length; i += 1) {
+      if (
+        !this.curentNonogram[i].every(
+          (value, index) => value === this.userChoose[i][index]
+        )
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   elEvent() {
     const levelInnerBlock = document.querySelector('.level_inner-block');
     const levelSpan = document.querySelector('.level_inner-block span');
@@ -349,6 +382,7 @@ class Nonograms extends GetDataNonograms {
     const nameBlockText = document.querySelector('.name-block p');
     const nameList = document.querySelector('.name-block ul');
     const theme = document.querySelector('.theme');
+    const randomBtn = document.querySelector('#random-game');
 
     nameBlock.addEventListener('click', () => {
       nameBlock.classList.toggle('active');
@@ -389,6 +423,23 @@ class Nonograms extends GetDataNonograms {
       this.getData();
     });
 
+    randomBtn.addEventListener('click', () => {
+      this.randomBtn = true;
+      setTimeout(() => {
+        this.randomBtn = false;
+      }, 2000);
+      const index = Math.floor(Math.random() * this.namesArray.length);
+      const chooseGame = this.namesArray[index].split('__');
+
+      this.level = `${chooseGame[1].split('-')[1]}`;
+      this.upHints = this.data[chooseGame[1]][chooseGame[0]].upHints;
+      this.leftHints = this.data[chooseGame[1]][chooseGame[0]].leftHints;
+      this.curentNonogram = this.data[chooseGame[1]][chooseGame[0]].result;
+
+      this.body.innerHTML = '';
+      this.getData();
+    });
+
     // смена цвета экрана
     theme.addEventListener('click', () => {
       const buttonTheme = document.querySelector('.theme');
@@ -415,37 +466,56 @@ class Nonograms extends GetDataNonograms {
         this.launch();
         this.gameStart = true;
       }
+
       const ceil = event.target;
+      const indexCeil = ceil.id.split('-');
+
       if (ceil.dataset.fill === '1' && !ceil.classList.contains('ceil')) {
         this.userResult += 1;
       }
+
       ceil.classList.add('ceil');
       ceil.textContent = '';
+      this.userChoose[indexCeil[0]][indexCeil[1]] = 1;
+
       if (this.userResult === this.countOne) {
-        this.stopTimer();
-        this.gameStart = false;
-        alert('WIN');
+        const res = this.arrayCompare();
+        if (res) {
+          this.stopTimer();
+          this.gameStart = false;
+          alert('WIN');
+        }
       }
     });
 
     // Получаем элемент, и вводим Х при клике на правую кнопку мыши
     nonogram.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+
       if (!this.gameStart) {
         this.launch();
         this.gameStart = true;
       }
-      event.preventDefault();
+
       if (event.button === 2) {
         const ceilX = event.target;
+        const indexCeil = ceilX.id.split('-');
+
         if (ceilX.dataset.fill === '1' && ceilX.classList.contains('ceil')) {
           this.userResult -= 1;
-          ceilX.classList.remove('ceil');
         }
+
+        ceilX.classList.remove('ceil');
         ceilX.textContent = 'X';
+        this.userChoose[indexCeil[0]][indexCeil[1]] = 0;
+
         if (this.userResult === this.countOne) {
-          this.stopTimer();
-          this.gameStart = false;
-          alert('WIN');
+          const res = this.arrayCompare();
+          if (res) {
+            this.stopTimer();
+            this.gameStart = false;
+            alert('WIN');
+          }
         }
       }
     });
@@ -454,23 +524,14 @@ class Nonograms extends GetDataNonograms {
   handleButtonsInGame() {
     const saveBtn = document.querySelector('#save-game');
     const decisionBtn = document.querySelector('#decision-game');
-    const randomBtn = document.querySelector('#random-game');
 
-    randomBtn.addEventListener('click', () => {
-      this.randomBtn = true;
-      setTimeout(() => {
-        this.randomBtn = false;
-      }, 2000);
-      const index = Math.floor(Math.random() * this.namesArray.length);
-      const chooseGame = this.namesArray[index].split('__');
+    decisionBtn.addEventListener('click', () => {
+      const footer = document.querySelector('footer');
+      const main = document.querySelector('main');
+      main.parentNode.removeChild(main);
+      this.stopTimer();
 
-      this.level = `${chooseGame[1].split('-')[1]}`;
-      this.upHints = this.data[chooseGame[1]][chooseGame[0]].upHints;
-      this.leftHints = this.data[chooseGame[1]][chooseGame[0]].leftHints;
-      this.curentNonogram = this.data[chooseGame[1]][chooseGame[0]].result;
-
-      this.body.innerHTML = '';
-      this.getData();
+      footer.parentNode.insertBefore(this.game(true), footer);
     });
   }
 
@@ -481,6 +542,7 @@ class Nonograms extends GetDataNonograms {
       this.drowHeader();
       if (!this.randomBtn) this.getRandom();
       this.game();
+      this.buildMatrix();
       this.drowFooter();
     } catch (err) {
       console.error(err);
