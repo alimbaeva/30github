@@ -5,6 +5,7 @@ class Timer {
     this.startTime = undefined;
     this.timerInterval = undefined;
     this.time = '';
+    this.lastTime = [];
   }
 
   get() {
@@ -12,8 +13,11 @@ class Timer {
   }
 
   formatTime(timeInSeconds) {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
+    const minutes =
+      Math.floor(timeInSeconds / 60) +
+      (this.lastTime[0] ? this.lastTime[0] : 0);
+    const seconds =
+      (timeInSeconds % 60) + (this.lastTime[1] ? this.lastTime[1] : 0);
     this.time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
