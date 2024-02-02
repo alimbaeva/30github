@@ -4,11 +4,13 @@ class Nonograms extends GetDataNonograms {
     this.body = document.querySelector('body');
     this.gameStart = false;
     this.randomBtn = false;
-    this.level = 1;
+    this.level = '1';
     this.theme = 'light';
     this.userResult = 0;
     this.countOne = 0;
-    this.winResults = [];
+    this.winResults = localStorage.getItem('winResults')
+      ? JSON.parse(localStorage.getItem('winResults'))
+      : [];
     this.nameText = localStorage.getItem('nameText')
       ? localStorage.getItem('nameText')
       : '----------';
@@ -384,9 +386,9 @@ class Nonograms extends GetDataNonograms {
 
   buildMatrix() {
     let n = 0;
-    if (this.level === 1) n = 5;
-    if (this.level === 2) n = 10;
-    if (this.level === 3) n = 15;
+    if (this.level === '1') n = 5;
+    if (this.level === '2') n = 10;
+    if (this.level === '3') n = 15;
 
     this.userChoose = Array.from({ length: n }, () =>
       Array.from({ length: n }, () => 0)
@@ -406,6 +408,83 @@ class Nonograms extends GetDataNonograms {
     return true;
   }
 
+  win() {
+    this.lastTime = [];
+    this.stopTimer();
+    this.gameStart = false;
+    if (this.winResults.length >= 5) this.winResults.shift();
+    this.winResults.push({
+      title: this.currentGameTitle,
+      timer: this.time,
+    });
+    localStorage.setItem('winResults', JSON.stringify(this.winResults));
+
+    const containerWin = document.createElement('div');
+    const innerWin = document.createElement('div');
+
+    containerWin.classList.add('container-win');
+    innerWin.classList.add('inner-win');
+    const title = document.createElement('h5');
+    title.textContent = `You have solved the nonogram in ${Number(this.time.split(':')[0]) * 60 + Number(this.time.split(':')[1])} seconds!`;
+
+    innerWin.append(title);
+    containerWin.append(innerWin);
+
+    this.body.append(containerWin);
+
+    innerWin.addEventListener('click', () => {
+      containerWin.remove();
+    });
+  }
+
+  winShow(data) {
+    const containerWin = document.createElement('div');
+    const innerWin = document.createElement('div');
+    const mainList = document.createElement('ul');
+
+    containerWin.classList.add('container-win');
+    innerWin.classList.add('inner-win');
+
+    if (data.length) {
+      data.forEach((el) => {
+        const infoArr = el.title.split(' ');
+        const list = document.createElement('li');
+        const name = document.createElement('span');
+        const level = document.createElement('span');
+        const timer = document.createElement('span');
+
+        timer.classList.add('win-timer');
+
+        name.textContent = `${infoArr[0]}`;
+        level.textContent = `${infoArr[1]}`;
+        timer.textContent = `${el.timer}`;
+
+        list.append(name);
+        list.append(level);
+        list.append(timer);
+
+        mainList.append(list);
+      });
+
+      innerWin.append(mainList);
+    }
+
+    if (!data.length) {
+      const title = document.createElement('h5');
+      title.textContent = `You haven't won yet!`;
+
+      innerWin.append(title);
+    }
+
+    containerWin.append(innerWin);
+
+    this.body.append(containerWin);
+
+    innerWin.addEventListener('click', () => {
+      containerWin.remove();
+    });
+  }
+
   elEvent() {
     const levelInnerBlock = document.querySelector('.level_inner-block');
     const levelSpan = document.querySelector('.level_inner-block span');
@@ -415,6 +494,7 @@ class Nonograms extends GetDataNonograms {
     const nameList = document.querySelector('.name-block ul');
     const theme = document.querySelector('.theme');
     const randomBtn = document.querySelector('#random-game');
+    const winningsBtn = document.querySelector('.winnings');
 
     nameBlock.addEventListener('click', () => {
       nameBlock.classList.toggle('active');
@@ -490,6 +570,21 @@ class Nonograms extends GetDataNonograms {
         buttonTheme.innerHTML = this.themeLightIcon;
       }
     });
+
+    winningsBtn.addEventListener('click', () => {
+      const sortedArray = this.winResults
+        .filter((obj) => 'timer' in obj)
+        .sort((a, b) => {
+          const timeA =
+            Number(a.timer.split(':')[0]) * 60 + Number(a.timer.split(':')[1]);
+          const timeB =
+            Number(b.timer.split(':')[0]) * 60 + Number(b.timer.split(':')[1]);
+
+          return timeA - timeB; // Сравнение времени в секундах
+        });
+
+      this.winShow(sortedArray);
+    });
   }
 
   handlenonogramCeil() {
@@ -516,10 +611,7 @@ class Nonograms extends GetDataNonograms {
       if (this.userResult === this.countOne) {
         const res = this.arrayCompare();
         if (res) {
-          this.lastTime = [];
-          this.stopTimer();
-          this.gameStart = false;
-          alert('WIN');
+          this.win();
         }
       }
     });
@@ -547,12 +639,7 @@ class Nonograms extends GetDataNonograms {
 
         if (this.userResult === this.countOne) {
           const res = this.arrayCompare();
-          if (res) {
-            this.lastTime = [];
-            this.stopTimer();
-            this.gameStart = false;
-            alert('WIN');
-          }
+          if (res) this.win();
         }
       }
     });
