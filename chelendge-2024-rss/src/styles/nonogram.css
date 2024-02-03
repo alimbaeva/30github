@@ -23,6 +23,7 @@
 }
 
 .parent-block {
+    padding-top: 1rem;
     justify-content: center;
 }
 
@@ -144,7 +145,7 @@
 }
 
 .batton-block {
-    max-width: 20rem;
+    max-width: 27rem;
     margin: 2rem auto;
 }
 
@@ -161,6 +162,8 @@
     box-shadow: 0 0 1.5rem var(--light-green-191);
 }
 
+
+/* modal win */
 .container-win {
     width: 100%;
     height: 100vh;

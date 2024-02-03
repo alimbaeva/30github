@@ -2,12 +2,17 @@ class Nonograms extends GetDataNonograms {
   constructor() {
     super();
     this.body = document.querySelector('body');
+    this.widthWindow =
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth;
     this.gameStart = false;
     this.randomBtn = false;
     this.level = '1';
     this.theme = 'light';
     this.userResult = 0;
     this.countOne = 0;
+    this.resetGame = false;
     this.winResults = localStorage.getItem('winResults')
       ? JSON.parse(localStorage.getItem('winResults'))
       : [];
@@ -47,6 +52,27 @@ class Nonograms extends GetDataNonograms {
 `;
   }
 
+  windowResize() {
+    const burgerMenu = document.querySelector('.burger-menu');
+    const nav = document.querySelector('.header nav');
+
+    window.addEventListener('resize', () => {
+      // Получаем текущую ширину экрана
+      this.widthWindow =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth;
+
+      if (this.widthWindow <= 650) {
+        burgerMenu.classList.remove('hidden');
+        nav.classList.add('hidden', 'inBurgerNav');
+      } else {
+        burgerMenu.classList.add('hidden');
+        nav.classList.remove('hidden', 'inBurgerNav');
+      }
+    });
+  }
+
   drowHeader() {
     if (this.theme === 'light') {
       this.body.classList.add('light');
@@ -62,19 +88,25 @@ class Nonograms extends GetDataNonograms {
     const innerHeader = document.createElement('div');
     innerHeader.classList.add('header');
 
-    const gamburgerMenu = document.createElement('div');
-    gamburgerMenu.classList.add('burger-menu', 'hidden');
+    const burgerMenu = document.createElement('div');
+    burgerMenu.classList.add(
+      'burger-menu',
+      `${this.widthWindow <= 650 ? undefined : 'hidden'}`
+    );
     const gamburgerIcon = `
     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7.94977 11.9498H39.9498" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M7.94977 23.9498H39.9498" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M7.94977 35.9498H39.9498" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7.94977 11.9498H39.9498" stroke="" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7.94977 23.9498H39.9498" stroke="" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M7.94977 35.9498H39.9498" stroke="" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     `;
-    gamburgerMenu.innerHTML = gamburgerIcon;
-    innerHeader.append(gamburgerMenu);
+    burgerMenu.innerHTML = gamburgerIcon;
+    innerHeader.append(burgerMenu);
 
     const nav = document.createElement('nav');
+    if (this.widthWindow <= 650) {
+      nav.classList.add('inBurgerNav', 'hidden');
+    }
 
     const levelBlock = document.createElement('div');
     levelBlock.classList.add('level_block');
@@ -144,7 +176,7 @@ class Nonograms extends GetDataNonograms {
 
     const winningsButton = document.createElement('button');
     winningsButton.classList.add('winnings');
-    winningsButton.textContent = 'выигрыши';
+    winningsButton.textContent = 'winnings';
     nav.append(winningsButton);
 
     innerHeader.append(nav);
@@ -213,19 +245,23 @@ class Nonograms extends GetDataNonograms {
     const parentBlock = document.createElement('div');
     const decisionBtn = document.createElement('button');
     const saveBtn = document.createElement('button');
+    const resetGameBtn = document.createElement('button');
     const startLastGame = document.createElement('button');
 
     parentBlock.classList.add('batton-block');
     saveBtn.id = 'save-game';
     decisionBtn.id = 'decision-game';
     startLastGame.id = 'last-game';
+    resetGameBtn.id = 'reset-game';
 
     saveBtn.textContent = 'save game';
     decisionBtn.textContent = 'decision game';
     startLastGame.textContent = 'last game';
+    resetGameBtn.textContent = 'reset game';
 
     parentBlock.append(decisionBtn);
     parentBlock.append(saveBtn);
+    parentBlock.append(resetGameBtn);
     if (this.lastGame) parentBlock.append(startLastGame);
 
     return parentBlock;
@@ -313,7 +349,7 @@ class Nonograms extends GetDataNonograms {
     parentBlock.append(parentInnerBlock);
     mainBlock.append(parentBlock);
 
-    if (!decision) {
+    if (!decision && !this.resetGame) {
       mainBlock.append(buttonsBlock);
       this.body.append(mainBlock);
       this.handleButtonsInGame();
@@ -321,6 +357,12 @@ class Nonograms extends GetDataNonograms {
     }
 
     if (this.startLastGame) this.startLastGame = false;
+
+    if (this.resetGame) {
+      mainBlock.append(buttonsBlock);
+      this.resetGame = false;
+      return mainBlock;
+    }
 
     if (decision) {
       return mainBlock;
@@ -412,6 +454,7 @@ class Nonograms extends GetDataNonograms {
     this.lastTime = [];
     this.stopTimer();
     this.gameStart = false;
+    this.userResult = 0;
     if (this.winResults.length >= 5) this.winResults.shift();
     this.winResults.push({
       title: this.currentGameTitle,
@@ -427,6 +470,7 @@ class Nonograms extends GetDataNonograms {
     const title = document.createElement('h5');
     title.textContent = `You have solved the nonogram in ${Number(this.time.split(':')[0]) * 60 + Number(this.time.split(':')[1])} seconds!`;
 
+    this.sound('win');
     innerWin.append(title);
     containerWin.append(innerWin);
 
@@ -485,6 +529,17 @@ class Nonograms extends GetDataNonograms {
     });
   }
 
+  sound(sound) {
+    const clickSound = new Audio(`/src/assets/sounds/${sound}.mp3`);
+
+    clickSound.play();
+
+    setTimeout(() => {
+      clickSound.pause();
+      clickSound.currentTime = 0;
+    }, 3000);
+  }
+
   elEvent() {
     const levelInnerBlock = document.querySelector('.level_inner-block');
     const levelSpan = document.querySelector('.level_inner-block span');
@@ -495,6 +550,16 @@ class Nonograms extends GetDataNonograms {
     const theme = document.querySelector('.theme');
     const randomBtn = document.querySelector('#random-game');
     const winningsBtn = document.querySelector('.winnings');
+    const burgerMenu = document.querySelector('.burger-menu');
+    const nav = document.querySelector('.header nav');
+
+    burgerMenu.addEventListener('click', () => {
+      nav.classList.toggle('hidden');
+      if (!nameList.classList.contains('hidden'))
+        nameList.classList.add('hidden');
+      if (!levelList.classList.contains('hidden'))
+        levelList.classList.add('hidden');
+    });
 
     nameBlock.addEventListener('click', () => {
       nameBlock.classList.toggle('active');
@@ -572,6 +637,8 @@ class Nonograms extends GetDataNonograms {
     });
 
     winningsBtn.addEventListener('click', () => {
+      if (nav.classList.contains('inBurgerNav')) nav.classList.add('hidden');
+
       const sortedArray = this.winResults
         .filter((obj) => 'timer' in obj)
         .sort((a, b) => {
@@ -604,9 +671,23 @@ class Nonograms extends GetDataNonograms {
         this.userResult += 1;
       }
 
-      ceil.classList.add('ceil');
+      if (ceil.classList.contains('ceil')) {
+        if (ceil.dataset.fill === '1') {
+          this.userResult -= 1;
+        }
+        ceil.classList.remove('ceil');
+        this.userChoose[indexCeil[0]][indexCeil[1]] = 0;
+        this.sound('white');
+      } else {
+        if (ceil.dataset.fill === '1') {
+          this.userResult += 1;
+        }
+        ceil.classList.add('ceil');
+        this.userChoose[indexCeil[0]][indexCeil[1]] = 1;
+        this.sound('black');
+      }
+
       ceil.textContent = '';
-      this.userChoose[indexCeil[0]][indexCeil[1]] = 1;
 
       if (this.userResult === this.countOne) {
         const res = this.arrayCompare();
@@ -634,6 +715,7 @@ class Nonograms extends GetDataNonograms {
         }
 
         ceilX.classList.remove('ceil');
+        this.sound('x');
         ceilX.textContent = 'X';
         this.userChoose[indexCeil[0]][indexCeil[1]] = 0;
 
@@ -649,11 +731,13 @@ class Nonograms extends GetDataNonograms {
     const saveBtn = document.querySelector('#save-game');
     const decisionBtn = document.querySelector('#decision-game');
     const startLastGame = document.querySelector('#last-game');
+    const resetGame = document.querySelector('#reset-game');
 
     decisionBtn.addEventListener('click', () => {
       const footer = document.querySelector('footer');
       const main = document.querySelector('main');
       main.parentNode.removeChild(main);
+      this.sound('ok');
       this.lastTime = [];
       this.stopTimer();
 
@@ -675,6 +759,21 @@ class Nonograms extends GetDataNonograms {
       this.getData();
     });
 
+    resetGame.addEventListener('click', () => {
+      const footer = document.querySelector('footer');
+      const main = document.querySelector('main');
+
+      main.parentNode.removeChild(main);
+
+      this.resetGame = true;
+      this.userResult = 0;
+
+      footer.parentNode.insertBefore(this.game(), footer);
+
+      this.handleButtonsInGame();
+      this.handlenonogramCeil();
+    });
+
     if (this.lastGame) {
       startLastGame.addEventListener('click', () => {
         localStorage.removeItem('nameText');
@@ -693,6 +792,7 @@ class Nonograms extends GetDataNonograms {
       if (!this.randomBtn) this.getRandom();
       this.game();
       this.drowFooter();
+      this.windowResize();
     } catch (err) {
       console.error(err);
     }

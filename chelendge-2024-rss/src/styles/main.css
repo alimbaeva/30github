@@ -8,6 +8,7 @@
 body {
     font-size: .8rem;
     font-weight: 500;
+    overflow-x: hidden;
 }
 
 ul {
@@ -24,8 +25,16 @@ main {
     min-height: 50vh;
 }
 
+body.light .burger-menu svg {
+    stroke: var(--black);
+}
+
 body.light svg {
     fill: var(--black);
+}
+
+body.dark .burger-menu svg {
+    stroke: var(--white);
 }
 
 body.dark svg {
@@ -50,9 +59,17 @@ body.light div {
     border-color: var(--black);
 }
 
+body.light .header .inBurgerNav {
+    background-color: var(--white);
+}
+
 body.light .name-block ul,
 body.light .level-list {
     background-color: var(--light-green-191);
+}
+
+body.dark .header .inBurgerNav {
+    background-color: var(--black);
 }
 
 body.dark .name-block ul,
@@ -97,4 +114,10 @@ body.dark .nonogram-row li.ceil {
 
 .hidden {
     display: none;
+}
+
+@media (max-width: 1300px) {
+    .container {
+        width: 90%;
+    }
 }

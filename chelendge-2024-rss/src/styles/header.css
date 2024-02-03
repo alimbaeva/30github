@@ -18,16 +18,23 @@ header {
 
 .header {
     padding: 2rem 0;
+    position: relative;
 }
 
 nav {
-    width: 40%;
+    width: 60%;
 }
 
 nav svg {
     width: .6rem;
     cursor: pointer;
     margin-left: .5rem;
+}
+
+.burger-menu {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
 }
 
 .burger-menu svg {
@@ -90,4 +97,40 @@ nav svg {
 .winnings:hover,
 .theme:hover {
     background-color: var(--light-green-178);
+}
+
+.header .inBurgerNav {
+    max-width: 10rem;
+    padding: 1.3rem .8rem;
+    background-color: var(--white);
+    box-shadow: 0 4px 5px 3px var(--blue-178); 
+    flex-wrap: wrap;
+    position: absolute;
+    left: 0;
+    bottom: -160%;
+    z-index: 10;
+}
+
+.header .inBurgerNav .level_block p,
+.header .inBurgerNav .level_block div,
+.header .inBurgerNav .name-block p {
+    display: inline-block;
+}
+
+.header .inBurgerNav .level_block .level_inner-block {
+ margin-right: 0;
+}
+
+.header .inBurgerNav button,
+.header .inBurgerNav .level_block,
+.header .inBurgerNav .name-block {
+    width: 90%;
+    margin: .3rem 0;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    nav {
+        width: 80%;
+    }
 }
