@@ -18,8 +18,8 @@ class Timer {
       (this.lastTime[0] ? this.lastTime[0] : 0);
     const seconds =
       (timeInSeconds % 60) + (this.lastTime[1] ? this.lastTime[1] : 0);
-    this.time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    this.time = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
 
   updateTimer() {
