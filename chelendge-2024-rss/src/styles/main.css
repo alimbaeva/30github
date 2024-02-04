@@ -121,3 +121,9 @@ body.dark .nonogram-row li.ceil {
         width: 90%;
     }
 }
+
+@media (max-width: 768px) {
+    body {
+        font-size: .6rem;
+    }
+}

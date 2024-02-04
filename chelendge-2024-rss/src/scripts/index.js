@@ -657,6 +657,44 @@ class Nonograms extends GetDataNonograms {
   handlenonogramCeil() {
     const nonogram = document.querySelector('#nonogram');
 
+    let longTapTimer;
+    const longTapDuration = 500; // Порог для долгого тапа в миллисекундах
+
+    const setX = (ceilX, indexCeil) => {
+      if (ceilX.dataset.fill === '1' && ceilX.classList.contains('ceil')) {
+        this.userResult -= 1;
+      }
+
+      ceilX.classList.remove('ceil');
+      this.sound('x');
+      ceilX.textContent = 'X';
+      this.userChoose[indexCeil[0]][indexCeil[1]] = 0;
+
+      if (this.userResult === this.countOne) {
+        const res = this.arrayCompare();
+        if (res) this.win();
+      }
+    };
+
+    nonogram.addEventListener('touchstart', (event) => {
+      if (!this.gameStart) {
+        this.launch();
+        this.gameStart = true;
+      }
+
+      // долгогий тапа здесь
+      longTapTimer = setTimeout(() => {
+        const ceilX = event.target;
+        const indexCeil = ceilX.id.split('-');
+
+        setX(ceilX, indexCeil);
+      }, longTapDuration);
+    });
+
+    nonogram.addEventListener('touchend', () => {
+      clearTimeout(longTapTimer);
+    });
+
     // Получаем элемент, при клике на левую кнопку мыши
     nonogram.addEventListener('click', (event) => {
       if (!this.gameStart) {
@@ -710,19 +748,7 @@ class Nonograms extends GetDataNonograms {
         const ceilX = event.target;
         const indexCeil = ceilX.id.split('-');
 
-        if (ceilX.dataset.fill === '1' && ceilX.classList.contains('ceil')) {
-          this.userResult -= 1;
-        }
-
-        ceilX.classList.remove('ceil');
-        this.sound('x');
-        ceilX.textContent = 'X';
-        this.userChoose[indexCeil[0]][indexCeil[1]] = 0;
-
-        if (this.userResult === this.countOne) {
-          const res = this.arrayCompare();
-          if (res) this.win();
-        }
+        setX(ceilX, indexCeil);
       }
     });
   }

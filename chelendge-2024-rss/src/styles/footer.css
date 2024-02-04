@@ -41,3 +41,14 @@ footer {
     width: 4.5rem;
     fill: var(--light-green-115);
 }
+
+@media (max-width: 768px) {
+    .footer p {
+        font-size: .6rem;
+    }
+    
+    .footer-item:last-child,
+    .footer-item svg {
+        width: 3rem;
+    }
+}
