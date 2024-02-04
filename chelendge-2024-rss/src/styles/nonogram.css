@@ -214,3 +214,44 @@
     text-align: center;
     background-color: var(--light-green-191);
 }
+
+@media (max-width: 710px) {
+    .down-block,
+    .up-block {
+        min-height: 3.6rem;
+    }
+    #nonogram {
+        min-width: 3.5rem;
+        min-height: 3.5rem;
+    }
+
+    .left-hints_rows,
+    .nonogram-row {
+        height: .8rem;
+    }
+
+    .left-hints_rows li,
+    .nonogram-row li {
+        width: .8rem;
+        height: .8rem;
+    }
+
+    .up-hints_rows {
+        width: .8rem;
+    }
+
+    .up-hints_rows li {
+        height: .8rem;
+    }
+
+    .batton-block {
+        width: 14rem;
+        justify-content: space-between;
+    }
+
+    .batton-block button {
+        margin-bottom: .7rem;
+        padding: .2rem .7rem;
+        font-size: .7rem;
+    }
+}
