@@ -52,4 +52,4 @@ class GetDataNonograms extends Timer {
 
 const getData = new GetDataNonograms();
 
-getData.fetchData('/src/data/data.json');
+getData.fetchData('data/data.json');

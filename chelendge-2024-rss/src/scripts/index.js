@@ -24,20 +24,8 @@ class Nonograms extends GetDataNonograms {
     this.lastGame = localStorage.getItem('lastGame')
       ? JSON.parse(localStorage.getItem('lastGame'))
       : undefined;
-    this.upHints = {
-      0: [2, 3],
-      1: [2, 3, 1],
-      2: [2, 3, 1],
-      3: [2, 3, 1],
-      4: [2, 3, 1],
-    };
-    this.leftHints = {
-      0: [2, 3],
-      1: [2, 3, 1],
-      2: [2, 3, 1],
-      3: [2, 3, 1],
-      4: [2, 3, 1],
-    };
+    this.upHints = {};
+    this.leftHints = {};
     this.userChoose = [];
     this.curentNonogram = [];
     this.themeDarkIcon = `
@@ -392,6 +380,7 @@ class Nonograms extends GetDataNonograms {
   }
 
   getRandom() {
+    this.countOne = 0;
     // если this.nameText пуст то выбираем по рандомна опираясь на level
     if (this.startLastGame) {
       this.currentGameTitle = `${this.lastGame.game}`;
@@ -401,6 +390,7 @@ class Nonograms extends GetDataNonograms {
       this.curentNonogram = this.data[curentData[1]][curentData[0]].result;
       this.userChoose = this.lastGame.lastTable;
       this.lastTime = this.lastGame.timer;
+      this.level = `${curentData[1].split('-')[1]}`;
 
       this.launch();
     } else if (!localStorage.getItem('nameText')) {
@@ -482,6 +472,7 @@ class Nonograms extends GetDataNonograms {
   }
 
   winShow(data) {
+    console.log('this.winShow');
     const containerWin = document.createElement('div');
     const innerWin = document.createElement('div');
     const mainList = document.createElement('ul');
@@ -530,7 +521,7 @@ class Nonograms extends GetDataNonograms {
   }
 
   sound(sound) {
-    const clickSound = new Audio(`/src/assets/sounds/${sound}.mp3`);
+    const clickSound = new Audio(`assets/sounds/${sound}.mp3`);
 
     clickSound.play();
 
@@ -602,6 +593,8 @@ class Nonograms extends GetDataNonograms {
     });
 
     randomBtn.addEventListener('click', () => {
+      localStorage.removeItem('nameText');
+      this.nameText = '----------';
       this.randomBtn = true;
       setTimeout(() => {
         this.randomBtn = false;
@@ -705,10 +698,6 @@ class Nonograms extends GetDataNonograms {
       const ceil = event.target;
       const indexCeil = ceil.id.split('-');
 
-      if (ceil.dataset.fill === '1' && !ceil.classList.contains('ceil')) {
-        this.userResult += 1;
-      }
-
       if (ceil.classList.contains('ceil')) {
         if (ceil.dataset.fill === '1') {
           this.userResult -= 1;
@@ -803,6 +792,7 @@ class Nonograms extends GetDataNonograms {
     if (this.lastGame) {
       startLastGame.addEventListener('click', () => {
         localStorage.removeItem('nameText');
+        this.nameText = '----------';
         this.startLastGame = true;
         this.body.innerHTML = '';
         this.getData();
@@ -812,7 +802,7 @@ class Nonograms extends GetDataNonograms {
 
   async getData() {
     try {
-      await this.fetchData('/src/data/data.json').then(() => {});
+      await this.fetchData('data/data.json').then(() => {});
 
       this.drowHeader();
       if (!this.randomBtn) this.getRandom();
