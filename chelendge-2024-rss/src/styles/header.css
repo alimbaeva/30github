@@ -22,7 +22,7 @@ header {
 }
 
 nav {
-    width: 60%;
+    width: 80%;
 }
 
 nav svg {
@@ -80,6 +80,7 @@ nav svg {
     width: 1rem;
 }
 
+.sound,
 #random-game,
 .theme,
 .winnings {
@@ -94,6 +95,7 @@ nav svg {
     padding: .3rem;
 }
 
+.sound:hover,
 #random-game:hover,
 .winnings:hover,
 .theme:hover {
@@ -132,6 +134,12 @@ nav svg {
 
 .header .inBurgerNav button {
     font-size: .6rem;
+}
+
+@media (max-width: 1030px) {
+    header button {
+        font-size: .7rem;
+    }
 }
 
 @media (max-width: 768px) {
