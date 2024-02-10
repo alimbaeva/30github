@@ -1,0 +1,25 @@
+{
+  "name": "hangman",
+  "version": "1",
+  "description": "js",
+  "main": "index.js",
+  "scripts": {
+    "lint:js": "eslint src/**/*.js",
+    "lint:css": "stylelint \"src/**/*.css\" --fix",
+    "format:js":  "prettier --write \"src/**/*.js\"",
+    "format:css": "prettier --write \"src/**/*.css\"",
+    "format:fix": "npm run format:js && npm run format:css"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "mocha": "^10.2.0",
+    "prettier": "^3.1.1",
+    "stylelint": "^16.1.0",
+    "stylelint-config-recommended-scss": "^14.0.0",
+    "stylelint-scss": "^6.0.0"
+  }
+}
