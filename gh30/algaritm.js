@@ -23,3 +23,12 @@ class Animals {
     }
 }
 
+class Cat {
+    constructor(name) {
+        this.name = name
+    }
+
+    call() {
+        return `Кисс, кисс ${this.name}`
+    }
+}
