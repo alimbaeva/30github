@@ -21,3 +21,13 @@ class Animals {
         console.log(this.type)
     }
 }
+
+class Cat {
+    constructor(name) {
+        this.name = name
+    }
+
+    call() {
+        return `Кисс, кисс ${this.name}`
+    }
+}
