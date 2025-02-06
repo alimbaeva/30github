@@ -23,12 +23,14 @@ class Animals {
     }
 }
 
-class Cat {
+class Cat extends Animals {
     constructor(name) {
+        super(type='Кошка')
         this.name = name
     }
 
     call() {
-        return `Кисс, кисс ${this.name}`
+        return `Кисс, кисс ${this.name}, это вид ${this.type}`
     }
 }
+
