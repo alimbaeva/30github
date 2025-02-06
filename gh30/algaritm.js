@@ -33,4 +33,3 @@ class Cat extends Animals {
         return `Кисс, кисс ${this.name}, это вид ${this.type}`
     }
 }
-
