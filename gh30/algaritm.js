@@ -32,5 +32,13 @@ class Cat extends Animals {
     call() {
         return `Кисс, кисс ${this.name}, это вид ${this.type}`
     }
+
+    do(action) {
+        return `${this.name} ${action}, потому что оно ${this.type}`
+    }
 }
 
+const callCat = new Cat('Киса')
+
+console.log(callCat.call())
+console.log(callCat.get())
