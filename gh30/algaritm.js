@@ -36,6 +36,12 @@ class Cat extends Animals {
     do(action) {
         return `${this.name} ${action}, потому что оно ${this.type}`
     }
+
+    get () {
+        Array.from({length: 5}, this.name).forEach((el) => {
+            console.log(`${el}`)
+        })
+    }
 }
 
 const callCat = new Cat('Киса')
