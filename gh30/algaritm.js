@@ -48,3 +48,8 @@ const callCat = new Cat('Киса')
 
 console.log(callCat.call())
 console.log(callCat.get())
+
+const dbj = {
+    name: 'Asel',
+    age: 16,
+}
