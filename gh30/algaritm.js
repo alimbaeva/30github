@@ -53,3 +53,7 @@ const dbj = {
     name: 'Asel',
     age: 16,
 }
+
+function fn(any) {
+  console.log(any)
+}
