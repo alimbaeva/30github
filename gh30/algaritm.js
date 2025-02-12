@@ -57,3 +57,5 @@ const dbj = {
 function fn(any) {
   console.log(any)
 }
+
+console.log(fn.apply(dbj))
