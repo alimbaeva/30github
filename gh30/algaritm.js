@@ -58,4 +58,5 @@ function fn(any) {
   console.log(any)
 }
 
-console.log(fn.apply(dbj))
+console.log(fn.apply(dbj, 'save'))
+console.log(fn.bind(dbj, [4]))
