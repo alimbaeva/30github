@@ -60,3 +60,5 @@ function fn(any) {
 
 console.log(fn.apply(dbj, 'save'))
 console.log(fn.call(dbj, [4]))
+
+const bindCall = fn.bind(dbj, 'bind');
