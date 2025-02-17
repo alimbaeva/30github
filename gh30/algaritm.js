@@ -3,62 +3,57 @@ const obj = {
     cash: {
         name: 'asyl'
     }
-}
+};
 
-const {cash: {name}} = obj
-const {name: nameis } = obj.cash
-
-console.log(name)
-
-console.log(nameis)
-
+const { name: nameis } = obj.cash;
+console.log(nameis); // prints 'asyl'
 
 class Animals {
     component(types) {
-        this.type = types
+        this.type = types;
     }
 
-    get () {
-        console.log(this.type)
+    get() {
+        console.log(this.type);
     }
 }
 
 class Cat extends Animals {
     constructor(name) {
-        super(type='Кошка')
-        this.name = name
+        super("Кошка"); // Correct usage
+        this.name = name;
     }
 
     call() {
-        return `Кисс, кисс ${this.name}, это вид ${this.type}`
+        return `Кисс, кисс ${this.name}, это вид ${this.type}`;
     }
 
     do(action) {
-        return `${this.name} ${action}, потому что оно ${this.type}`
+        return `${this.name} ${action}, потому что оно ${this.type}`;
     }
 
-    get () {
-        Array.from({length: 5}, this.name).forEach((el) => {
-            console.log(`${el}`)
-        })
+    get() {
+        Array.from({ length: 5 }, () => this.name).forEach((el) => {
+            console.log(`${el}`);
+        });
     }
 }
 
-const callCat = new Cat('Киса')
-
-console.log(callCat.call())
-console.log(callCat.get())
+const callCat = new Cat('Киса');
+console.log(callCat.call()); // "Кисс, кисс Киса, это вид Кошка"
+callCat.get(); // Logs 'Киса' five times
 
 const dbj = {
     name: 'Asel',
     age: 16,
-}
+};
 
 function fn(any) {
-  console.log(any)
+    console.log(any);
 }
 
-console.log(fn.apply(dbj, 'save'))
-console.log(fn.call(dbj, [4]))
+console.log(fn.apply(dbj, ['save'])); // 'save' as an array, works correctly
+console.log(fn.call(dbj, 'call')); // 'call' as a single argument, works fine
 
 const bindCall = fn.bind(dbj, 'bind');
+console.log(bindCall()); // 'bind'
