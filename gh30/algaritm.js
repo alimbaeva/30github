@@ -57,3 +57,4 @@ console.log(fn.call(dbj, 'call')); // 'call' as a single argument, works fine
 
 const bindCall = fn.bind(dbj, 'bind');
 console.log(bindCall()); // 'bind'
+
