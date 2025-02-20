@@ -63,5 +63,10 @@ const fnArg = (arg1, ...arg2) => {
     console.log(arg2);
 }
 
+function fnArg2 () {
+    console.log(arguments);
+}
+
 console.log(fnArg(15, 12, 11, 10));
 console.log(fnArg(15, ['12, 11, 10', 'ass']));
+console.log(fnArg2(15, ['12, 11,']));
