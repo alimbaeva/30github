@@ -70,6 +70,7 @@ function fnArg2 () {
 console.log(fnArg(15, 12, 11, 10));
 console.log(fnArg(15, ['12, 11, 10', 'ass']));
 console.log(fnArg2(15, ['12, 11,']));
-const arrowfn = () => {
+const arrowfn = (...arg) => {
+    console.log(arg);
     console.log('arrow function');
 }
