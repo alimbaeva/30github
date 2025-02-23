@@ -74,3 +74,4 @@ const arrowfn = (...arg) => {
     console.log(arg);
     console.log('arrow function');
 }
+console.log(arrowfn(1,2,3,4,5,6,7);
