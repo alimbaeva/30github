@@ -76,3 +76,4 @@ const arrowfn = (...arg) => {
 }
 console.log(arrowfn(15, ['12, 11,']));
 console.log(arrowfn(1,2,3,4,5,6,7);
+console.log(arrowfn();
