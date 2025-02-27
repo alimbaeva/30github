@@ -80,4 +80,5 @@ console.log(arrowfn();
 
 const fnExpreton = () {
     console.log('fnExpreton')
+    console.log(this)
 }
