@@ -82,3 +82,5 @@ const fnExpreton = () {
     console.log('fnExpreton')
     console.log(this)
 }
+
+fnExpreton(1,2,3)
