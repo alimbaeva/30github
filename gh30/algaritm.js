@@ -84,3 +84,4 @@ const fnExpreton = () {
 }
 
 fnExpreton(1,2,3)
+fnExpreton(3)
