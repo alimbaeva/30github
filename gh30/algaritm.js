@@ -86,3 +86,7 @@ const fnExpreton = () {
 
 fnExpreton(1,2,3)
 fnExpreton(3)
+
+console.log(3 === '3')
+console.log(3 == '3')
+console.log(3 + '3')
